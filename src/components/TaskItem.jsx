@@ -1,21 +1,21 @@
 /**
  * @file TaskItem.jsx
  * @description Componente para representar una tarea individual en la lista.
- * Permite marcar como completada, editar y eliminar tareas.
+ * Permite marcar como completada, editar, eliminar y cancelar la edición de las tareas.
  * Utiliza íconos de `react-icons` para las acciones.
  */
 
 /* eslint-disable react/prop-types */
-// La línea anterior desactiva temporalmente las advertencias de ESLint relacionadas con las prop-types. 
+// Desactiva temporalmente las advertencias de ESLint relacionadas con las prop-types. 
 // Esto es útil si las prop-types no se están utilizando pero se planea hacerlo más adelante.
 
 import { useState } from 'react';
-import { FiCheck, FiTrash2, FiEdit } from 'react-icons/fi';
+import { FiCheck, FiTrash2, FiEdit, FiX } from 'react-icons/fi'; // Importamos el icono para cancelar
 import './TaskItem.css';
 
 /**
  * TaskItem es un componente funcional que muestra una tarea individual y proporciona
- * opciones para marcarla como completada, editarla o eliminarla.
+ * opciones para marcarla como completada, editarla, eliminarla o cancelar la edición.
  * 
  * @function TaskItem
  * @param {Object} props - Las propiedades recibidas por el componente.
@@ -28,10 +28,10 @@ import './TaskItem.css';
  */
 function TaskItem({ task, index, toggleTaskCompletion, removeTask, editTask }) {
   // Estados locales para manejar la edición de la tarea.
-  const [isEditing, setIsEditing] = useState(false);
-  const [newText, setNewText] = useState(task.text);
-  const [newCategory, setNewCategory] = useState(task.category);
-  const [newDueDate, setNewDueDate] = useState(task.dueDate);
+  const [isEditing, setIsEditing] = useState(false); // Estado para determinar si se está editando la tarea.
+  const [newText, setNewText] = useState(task.text); // Estado para el nuevo texto de la tarea.
+  const [newCategory, setNewCategory] = useState(task.category); // Estado para la nueva categoría de la tarea.
+  const [newDueDate, setNewDueDate] = useState(task.dueDate); // Estado para la nueva fecha de vencimiento de la tarea.
 
   /**
    * Maneja la activación y desactivación del modo de edición.
@@ -47,6 +47,19 @@ function TaskItem({ task, index, toggleTaskCompletion, removeTask, editTask }) {
     setIsEditing(!isEditing);
   };
 
+  /**
+   * Cancela la edición de la tarea y restablece los valores originales.
+   * 
+   * @function handleCancelEdit
+   * @description Restablece los valores de la tarea a su estado original y desactiva el modo de edición.
+   */
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setNewText(task.text);
+    setNewCategory(task.category);
+    setNewDueDate(task.dueDate);
+  };
+
   return (
     <li className={`task-item ${task.completed ? 'completed' : ''}`}>
       {isEditing ? (
@@ -56,6 +69,7 @@ function TaskItem({ task, index, toggleTaskCompletion, removeTask, editTask }) {
             type="text"
             value={newText}
             onChange={(e) => setNewText(e.target.value)}
+            placeholder="Editar tarea..."
           />
           <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)}>
             <option value="Trabajo">Trabajo</option>
@@ -67,6 +81,16 @@ function TaskItem({ task, index, toggleTaskCompletion, removeTask, editTask }) {
             value={newDueDate}
             onChange={(e) => setNewDueDate(e.target.value)}
           />
+          <div className="edit-buttons">
+            {/* Botón para guardar los cambios en la tarea */}
+            <button className="edit-save-btn" onClick={handleEdit} aria-label="Guardar cambios">
+              <FiCheck size={18} />
+            </button>
+            {/* Botón para cancelar la edición de la tarea */}
+            <button className="edit-cancel-btn" onClick={handleCancelEdit} aria-label="Cancelar edición">
+              <FiX size={18} />
+            </button>
+          </div>
         </div>
       ) : (
         // Vista normal de la tarea: muestra el texto y la información adicional de la tarea.
