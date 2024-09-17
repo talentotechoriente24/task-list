@@ -3,9 +3,10 @@
  * @description Componente principal de la aplicación de lista de tareas.
  * Gestiona el estado global, incluyendo las tareas, las búsquedas y los filtros.
  * Renderiza los componentes Header, TaskForm, TaskList, TaskSearch, y TaskFilters.
+ * Incluye almacenamiento en localStorage para persistir las tareas.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Importamos useEffect para manejar efectos secundarios
 import Header from './components/Header';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
@@ -22,10 +23,28 @@ import './index.css';
  */
 function App() {
   // Definición de estados utilizando useState
-  const [tasks, setTasks] = useState([]); // Estado que almacena todas las tareas.
+  const [tasks, setTasks] = useState(() => {
+    // Intenta cargar las tareas desde localStorage al iniciar la aplicación
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      return JSON.parse(savedTasks).map(task => ({
+        ...task,
+        createdAt: new Date(task.createdAt),
+        completedAt: task.completedAt ? new Date(task.completedAt) : null,
+      }));
+    }
+    return [];
+  });
   const [searchQuery, setSearchQuery] = useState(''); // Estado para la búsqueda de tareas.
   const [filterCategory, setFilterCategory] = useState(''); // Estado para el filtro de categoría.
   const [filterStatus, setFilterStatus] = useState(''); // Estado para el filtro de estado (completadas o pendientes).
+
+  /**
+   * Guarda las tareas en localStorage cada vez que el estado de tasks cambia.
+   */
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   /**
    * Añade una nueva tarea al listado de tareas.

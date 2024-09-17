@@ -6,7 +6,8 @@
   margin-top: 10px;
 }
 
-.edit-form input, .edit-form select {
+.edit-form input,
+.edit-form select {
   padding: 8px;
   font-size: 1rem;
   border: 1px solid #ddd;
@@ -20,7 +21,8 @@
   justify-content: flex-end;
 }
 
-.edit-save-btn, .edit-cancel-btn {
+.edit-save-btn,
+.edit-cancel-btn {
   background-color: transparent;
   border: none;
   cursor: pointer;

@@ -20,9 +20,10 @@ import './TaskList.css';
  * @param {Array} props.tasks - Array de tareas que se deben renderizar.
  * @param {Function} props.toggleTaskCompletion - Función para alternar el estado de completado de una tarea.
  * @param {Function} props.removeTask - Función para eliminar una tarea.
+ * @param {Function} props.editTask - Función para editar una tarea.
  * @returns {JSX.Element} JSX que representa la lista de tareas.
  */
-function TaskList({ tasks, toggleTaskCompletion, removeTask }) {
+function TaskList({ tasks, toggleTaskCompletion, removeTask, editTask }) {
   return (
     // Contenedor principal para la lista de tareas, con la clase CSS "task-list".
     <ul className="task-list">
@@ -34,6 +35,7 @@ function TaskList({ tasks, toggleTaskCompletion, removeTask }) {
           index={index} // El índice de la tarea en la lista.
           toggleTaskCompletion={toggleTaskCompletion} // Función para alternar el estado de completado.
           removeTask={removeTask} // Función para eliminar la tarea.
+          editTask={editTask} // Función para editar la tarea.
         />
       ))}
     </ul>
